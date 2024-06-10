@@ -1,5 +1,6 @@
 import { Page } from "@playwright/test";
 import { EmployeeDetails } from "../testdata/orangeHrmInterfaces";
+import step from "@e2e/libs/steps";
 
 class AddEmployeePage {
   constructor(private readonly page: Page) {}
@@ -19,7 +20,7 @@ class AddEmployeePage {
     .nth(4);
   private readonly saveButton = this.page.getByRole("button", { name: "Save" });
   public readonly successMessage = this.page.getByText(/Successfully Saved/i);
-
+  @step("This adds an employee")
   async addEmployee(employeeDetails: EmployeeDetails) {
     await this.firstNameTextBox.fill(employeeDetails.firstName);
     await this.lastNameTextBox.fill(employeeDetails.lastName);
