@@ -3,8 +3,7 @@ import step from "@e2e/libs/steps";
 class LeftMenuComponent {
   constructor(private readonly page: Page) {}
 
-  private readonly menu = (menuName: string) =>
-    this.page.getByRole("link", { name: menuName });
+  private readonly menu = (menuName: string) => this.page.getByRole("link", { name: menuName });
 
   @step("This selects the left menuItem")
   async selectLeftMenuItem(menuItem: string) {

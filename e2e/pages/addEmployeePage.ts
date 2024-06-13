@@ -14,10 +14,7 @@ class AddEmployeePage {
   private readonly middleNameTextBox = this.page.getByRole("textbox", {
     name: "Middle Name",
   });
-  private readonly idTextBox = this.page
-    .locator("form")
-    .getByRole("textbox")
-    .nth(4);
+  private readonly idTextBox = this.page.locator("form").getByRole("textbox").nth(4);
   private readonly saveButton = this.page.getByRole("button", { name: "Save" });
   public readonly successMessage = this.page.getByText(/Successfully Saved/i);
   @step("This adds an employee")

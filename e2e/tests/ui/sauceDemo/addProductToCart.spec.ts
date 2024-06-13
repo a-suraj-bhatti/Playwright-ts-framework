@@ -1,4 +1,4 @@
-import { test } from "@e2e/fixtures/customFixtures";
+import { expect, test } from "@e2e/fixtures/customFixtures";
 
 test("User logs in to the Sauce Labs Demo page and adds an item to the cart", async ({
   loginPage,
@@ -7,4 +7,5 @@ test("User logs in to the Sauce Labs Demo page and adds an item to the cart", as
   await loginPage.visit();
   await loginPage.login();
   await homePage.addToCart("Sauce Labs Bolt T-Shirt");
+  await expect(homePage.addTocartButton("Sauce Labs Bolt T-Shirt")).toBeVisible();
 });
