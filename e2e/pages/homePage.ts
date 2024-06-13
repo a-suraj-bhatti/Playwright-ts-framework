@@ -1,6 +1,7 @@
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import LeftMenuComponent from "./components/leftMenuComponent";
 import TopMenuComponent from "./components/topMenuComponent";
+import step from "@e2e/libs/steps";
 
 class HomePage {
   //left menu component and top menu component
@@ -13,12 +14,15 @@ class HomePage {
     this.topMenuComponent = new TopMenuComponent(page);
   }
 
-  getLeftMenuComponent() {
-    return this.leftMenuComponent;
-  }
+  readonly addTocartButton = (productName: string): Locator =>
+    this.page
+      .locator(".inventory_list div")
+      .filter({ hasText: productName })
+      .getByRole("button", { name: "Add to cart" });
 
-  getTopMenuComponent() {
-    return this.topMenuComponent;
+  @step("Product was added to the cart")
+  async addToCart(productName: string) {
+    await this.addTocartButton(productName).click();
   }
 }
 

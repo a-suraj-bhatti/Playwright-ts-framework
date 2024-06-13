@@ -1,5 +1,5 @@
 import { test, expect } from "@e2e/fixtures/customFixtures";
-import { Env } from "@e2e/frameworkConfig/env";
+import { Env } from "@e2e/environments/env";
 import { getRandomEmployeeDetails } from "@e2e/testdata/random";
 
 test("Add Employee", async ({ loginPage, homePage, addEmployeePage }) => {

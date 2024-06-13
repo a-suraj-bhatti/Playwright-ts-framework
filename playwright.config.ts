@@ -4,11 +4,14 @@ import { config } from "dotenv";
 if (process.env.ENVIRONMENT) {
   console.log("ENVIRONMENT: ", process.env.ENVIRONMENT);
   config({
-    path: `.env.${process.env.ENVIRONMENT}`,
+    path: `./e2e/environments/.env.${process.env.ENVIRONMENT}`,
     override: true,
   });
 } else {
-  config();
+  config({
+    path: `./e2e/environments/.env.qa`,
+    override: true,
+  });
 }
 
 export default defineConfig({

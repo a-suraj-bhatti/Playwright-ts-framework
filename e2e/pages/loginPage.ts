@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import HomePage from "./homePage";
-import { Env } from "@e2e/frameworkConfig/env";
+import { Env } from "@e2e/environments/env";
 import step from "@e2e/libs/steps";
 
 class LoginPage {
@@ -16,12 +16,12 @@ class LoginPage {
   async visit() {
     await this.page.goto(Env.BASE_URL);
   }
+
   @step("This logs into the site")
-  async login(username: string, password: string) {
-    await this.userNameTextBox.fill(username);
-    await this.passwordTextBox.fill(password);
+  async login() {
+    await this.userNameTextBox.fill(Env.USERNAME);
+    await this.passwordTextBox.fill(Env.PASSWORD);
     await this.loginButton.click();
-    return new HomePage(this.page);
   }
 }
 
