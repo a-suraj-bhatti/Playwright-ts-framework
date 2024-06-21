@@ -36,9 +36,9 @@ export default defineConfig({
     //   use: { ...devices["Desktop Safari"] },
     //   testDir: "./e2e/tests/ui",
     // },
-    // {
-    //   name: "api",
-    //   testDir: "./e2e/tests/api",
-    // },
+    {
+      name: "api",
+      testDir: "./e2e/tests/api",
+    },
   ],
 });
