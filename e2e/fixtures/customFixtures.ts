@@ -1,27 +1,29 @@
 import { test as base } from "@playwright/test";
-import LoginPage from "@pages/loginPage";
-import HomePage from "@pages/homePage";
-import AddEmployeePage from "@pages/addEmployeePage";
-import CartPage from "@e2e/pages/cartPage";
-import CheckOutPage from "@e2e/pages/checkOutPage";
+// ############ DELETE THESE IMPORTS. THESE ARE ONLY FOR THE DEMO ###############
+import LoginPage from "@pages/Demo/loginPage";
+import HomePage from "@pages/Demo/homePage";
+import CartPage from "@e2e/pages/Demo/cartPage";
+import CheckOutPage from "@e2e/pages/Demo/checkOutPage";
+// ############ DELETE THESE IMPORTS. THESE ARE ONLY FOR THE DEMO ###############
 
 interface PageFixtures {
+  // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
   loginPage: LoginPage;
   homePage: HomePage;
-  addEmployeePage: AddEmployeePage;
   cartPage: CartPage;
   checkOutPage: CheckOutPage;
+  // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
+
 }
 
 export const test = base.extend<PageFixtures>({
+
+  // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
-  },
-  addEmployeePage: async ({ page }, use) => {
-    await use(new AddEmployeePage(page));
   },
   cartPage: async ({ page }, use) => {
     await use(new CartPage(page));
@@ -29,6 +31,8 @@ export const test = base.extend<PageFixtures>({
   checkOutPage: async ({ page }, use) => {
     await use(new CheckOutPage(page));
   },
+    // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
+
 });
 
 export { expect } from "@playwright/test";
