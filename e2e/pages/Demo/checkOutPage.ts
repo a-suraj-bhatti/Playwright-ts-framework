@@ -27,7 +27,7 @@ class CheckOutPage {
   async clickFinishButton(): Promise<void> {
     await this.finishButton.click();
   }
-  
+
   async getItemTotal(): Promise<string> {
     return await this.itemTotal.textContent();
   }
