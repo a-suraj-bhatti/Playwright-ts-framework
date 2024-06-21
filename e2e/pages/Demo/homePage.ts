@@ -20,6 +20,9 @@ class HomePage {
       .filter({ hasText: productName })
       .getByRole("button", { name: "Add to cart" });
 
+  readonly productLink = (productName: string): Locator =>
+    this.page.getByRole("link", { name: productName });
+
   @step("Product was added to the cart")
   async addProductToCart(productName: string) {
     await this.addTocartButton(productName).click();
