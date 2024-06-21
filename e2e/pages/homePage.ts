@@ -21,7 +21,7 @@ class HomePage {
       .getByRole("button", { name: "Add to cart" });
 
   @step("Product was added to the cart")
-  async addToCart(productName: string) {
+  async addProductToCart(productName: string) {
     await this.addTocartButton(productName).click();
   }
 }

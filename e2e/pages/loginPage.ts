@@ -1,6 +1,7 @@
 import { Page } from "@playwright/test";
 import { Env } from "@e2e/environments/env";
 import step from "@e2e/libs/steps";
+import HomePage from "./homePage";
 
 class LoginPage {
   constructor(private readonly page: Page) {}
@@ -21,6 +22,7 @@ class LoginPage {
     await this.userNameTextBox.fill(Env.USERNAME);
     await this.passwordTextBox.fill(Env.PASSWORD);
     await this.loginButton.click();
+    return new HomePage(this.page);
   }
 }
 
