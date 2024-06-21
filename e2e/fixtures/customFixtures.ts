@@ -13,11 +13,9 @@ interface PageFixtures {
   cartPage: CartPage;
   checkOutPage: CheckOutPage;
   // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
-
 }
 
 export const test = base.extend<PageFixtures>({
-
   // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
@@ -31,8 +29,7 @@ export const test = base.extend<PageFixtures>({
   checkOutPage: async ({ page }, use) => {
     await use(new CheckOutPage(page));
   },
-    // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
-
+  // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
 });
 
 export { expect } from "@playwright/test";
