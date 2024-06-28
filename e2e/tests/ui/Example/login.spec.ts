@@ -6,5 +6,5 @@ test("Verify that the user is able to login to the application", async ({
 }) => {
   await loginPage.visit();
   await loginPage.login();
-  await expect(homePage.productLink("Sauce Labs Backpack")).toBeVisible();
+  await expect(homePage.product("Sauce Labs Backpack")).toBeVisible();
 });
