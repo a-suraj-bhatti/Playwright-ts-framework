@@ -1,22 +1,22 @@
 import { test as base } from "@playwright/test";
-// ############ DELETE THESE IMPORTS. THESE ARE ONLY FOR THE DEMO ###############
-import LoginPage from "@pages/Demo/loginPage";
-import HomePage from "@pages/Demo/homePage";
-import CartPage from "@e2e/pages/Demo/cartPage";
-import CheckOutPage from "@e2e/pages/Demo/checkOutPage";
-// ############ DELETE THESE IMPORTS. THESE ARE ONLY FOR THE DEMO ###############
+// ############ DELETE THESE IMPORTS. ADDED ONLY AS AN EXAMPLE ###############
+import LoginPage from "@pages/Example/loginPage";
+import HomePage from "@pages/Example/homePage";
+import CartPage from "@e2e/pages/Example/cartPage";
+import CheckOutPage from "@e2e/pages/Example/checkOutPage";
+// ############ DELETE THESE IMPORTS. ADDED ONLY AS AN EXAMPLE ###############
 
 interface PageFixtures {
-  // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
+  // ############ DELETE.ADDED ONLY AS AN EXAMPLE ##############
   loginPage: LoginPage;
   homePage: HomePage;
   cartPage: CartPage;
   checkOutPage: CheckOutPage;
-  // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
+  // ############ DELETE.ADDED ONLY AS AN EXAMPLE ##############
 }
 
 export const test = base.extend<PageFixtures>({
-  // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
+  // ############ DELETE.ADDED ONLY AS AN EXAMPLE ##############
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
@@ -29,7 +29,7 @@ export const test = base.extend<PageFixtures>({
   checkOutPage: async ({ page }, use) => {
     await use(new CheckOutPage(page));
   },
-  // ############ DELETE.ADDED ONLY FOR THE DEMO ##############
+  // ############ DELETE.ADDED ONLY AS AN EXAMPLE ##############
 });
 
 export { expect } from "@playwright/test";

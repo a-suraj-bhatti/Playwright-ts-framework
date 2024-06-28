@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
-import LeftMenuComponent from "@e2e/pages/Demo/components/leftMenuComponent";
-import TopMenuComponent from "@e2e/pages/Demo/components/topMenuComponent";
+import LeftMenuComponent from "@e2e/pages/Example/components/leftMenuComponent";
+import TopMenuComponent from "@e2e/pages/Example/components/topMenuComponent";
 import step from "@e2e/libs/steps";
 
 class HomePage {
@@ -21,7 +21,7 @@ class HomePage {
       .getByRole("button", { name: "Add to cart" });
 
   readonly productLink = (productName: string): Locator =>
-    this.page.getByRole("link", { name: productName });
+    this.page.getByRole("link", { name: productName }).nth(1);
 
   @step("Product was added to the cart")
   async addProductToCart(productName: string) {
