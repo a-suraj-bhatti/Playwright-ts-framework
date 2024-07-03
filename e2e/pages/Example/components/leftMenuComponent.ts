@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import step from "@e2e/libs/steps";
+import { step } from "@e2e/libs/custom-decorators";
 class LeftMenuComponent {
   constructor(private readonly page: Page) {}
 

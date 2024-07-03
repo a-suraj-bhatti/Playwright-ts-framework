@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import LeftMenuComponent from "@e2e/pages/Example/components/leftMenuComponent";
 import TopMenuComponent from "@e2e/pages/Example/components/topMenuComponent";
-import step from "@e2e/libs/steps";
+import { step } from "@e2e/libs/custom-decorators";
 
 class HomePage {
   //left menu component and top menu component

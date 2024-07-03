@@ -1,4 +1,4 @@
-import step from "@e2e/libs/steps";
+import { step } from "@e2e/libs/custom-decorators";
 import { Locator, Page } from "@playwright/test";
 class CartPage {
   constructor(private readonly page: Page) {

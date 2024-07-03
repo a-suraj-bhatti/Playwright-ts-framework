@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import { Env } from "@e2e/environments/env";
-import step from "@e2e/libs/steps";
+import { step } from "@e2e/libs/custom-decorators";
 import HomePage from "./homePage";
 
 class LoginPage {

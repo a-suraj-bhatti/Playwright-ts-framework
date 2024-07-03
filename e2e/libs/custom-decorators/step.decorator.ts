@@ -10,7 +10,7 @@ function step(message: string) {
       await test.step(`STEP: ${message}`, async () => {
         result = await originalMethod.call(this, ...args);
       });
-      return result; // Return the result of the original method call
+      return result; 
     }
     return replacementMethod;
   };

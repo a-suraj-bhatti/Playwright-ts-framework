@@ -1,4 +1,4 @@
-import step from "@e2e/libs/steps";
+import { step } from "@e2e/libs/custom-decorators";
 import { Locator, Page } from "@playwright/test";
 class CheckOutPage {
   constructor(private readonly page: Page) {
@@ -20,7 +20,7 @@ class CheckOutPage {
   }
 
   @step("Continue button was clicked on the checkoutpage")
-  async clickContinueButton(): Promise<void> {
+  async continueToCheckOutOverview(): Promise<void> {
     await this.continueButton.click();
   }
 
