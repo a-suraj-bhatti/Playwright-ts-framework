@@ -2,10 +2,7 @@ import { Locator, Page } from "@playwright/test";
 import { step } from "@e2e/libs/custom-decorators";
 
 class HomePage {
-
-
-  constructor(private readonly page: Page) {
-  }
+  constructor(private readonly page: Page) {}
 
   readonly addTocartButton = (productName: string): Locator =>
     this.page
