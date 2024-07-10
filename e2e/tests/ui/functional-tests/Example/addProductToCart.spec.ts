@@ -1,5 +1,5 @@
 import { expect, test } from "@e2e/fixtures/customFixtures";
-import { getRandomCustomerDetails } from "@e2e/testdata/testDataGenerator";
+import { getRandomCustomerDetails } from "@e2e/testdata/Example/testDataGenerator";
 
 test("User logs in to the Sauce Labs Demo page and adds an item to the cart", async ({
   loginPage,
