@@ -1,6 +1,6 @@
 import { expect, test } from "@e2e/fixtures/customFixtures";
 
-test.describe("There are two tests",{ tag: "@functionality_describe" }, () => {
+test.describe("There are two tests", { tag: "@functionality_describe" }, () => {
   test(
     "Verify that the user is able to login to the application",
     { tag: ["@functionality_login_test", "@positive", "@priority_high"] },
@@ -18,7 +18,7 @@ test.describe("There are two tests",{ tag: "@functionality_describe" }, () => {
         type: "issue",
         description: "https://github.com/microsoft/playwright/issues/23180",
       },
-      tag: '@functionality_singleTag',
+      tag: "@functionality_singleTag",
     },
     async ({ page }) => {
       // ...
@@ -26,4 +26,3 @@ test.describe("There are two tests",{ tag: "@functionality_describe" }, () => {
     },
   );
 });
-
