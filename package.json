@@ -13,6 +13,7 @@
     "lint:fix": "npx eslint . --fix",
     "format": "npx prettier . --check",
     "format:fix": "npx prettier . --write",
+    "report": "node scripts/report-generator.js",
     "prepare": "husky"
   },
   "keywords": [],
