@@ -21,6 +21,10 @@ function parseTags(tags, currentTest) {
       currentTest.scenarioType = "positive";
     } else if (tag === "@negative") {
       currentTest.scenarioType = "negative";
+    } else if (tag.startsWith("@sprint_")){
+      currentTest.sprint = tag.split('_')[1];
+    } else if (tag.startsWith("@team_")){
+      currentTest.teamName = tag.split("_")[1];
     }
   });
 }
@@ -53,7 +57,9 @@ function extractDataFromFile(filePath, testType) {
           functionality: inheritedTags.functionality || "",
           testType, 
           priority: inheritedTags.priority || "", 
-          scenarioType: inheritedTags.scenarioType || "" 
+          scenarioType: inheritedTags.scenarioType || "" ,
+          sprint: inheritedTags.sprint || "",
+          teamName: inheritedTags.teamName || "",
         };
   
         if (node.arguments[1] && node.arguments[1].type === "ObjectExpression") {
@@ -154,6 +160,8 @@ function writeDataToExcel(data, outputFile) {
     { header: "Test Type", key: "testType", width: 15 },
     { header: "Priority", key: "priority", width: 15 },
     { header: "Scenario Type", key: "scenarioType", width: 15 },
+    { header: "Team Name", key: "teamName", width: 15 },
+    { header: "Sprint", key: "sprint", width: 15 },
   ];
 
   data.forEach((test) => {
