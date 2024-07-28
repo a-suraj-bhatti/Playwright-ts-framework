@@ -1,8 +1,8 @@
-const xlsx = require('xlsx');
-const fs = require('fs');
+const xlsx = require("xlsx");
+const fs = require("fs");
 
 // Read Excel file
-const workbook = xlsx.readFile('Test_Data.xlsx');
+const workbook = xlsx.readFile("Test_Data.xlsx");
 const sheetName = workbook.SheetNames[0];
 const worksheet = workbook.Sheets[sheetName];
 const data = xlsx.utils.sheet_to_json(worksheet);
@@ -14,16 +14,23 @@ const teamData = {};
 const testTypes = new Set();
 const scenarioTypes = new Set();
 
-data.forEach(row => {
-  functionalities[row.Functionality || 'Unspecified'] = (functionalities[row.Functionality || 'Unspecified'] || 0) + 1;
-  sprintData[row.Sprint || 'Unspecified'] = (sprintData[row.Sprint || 'Unspecified'] || 0) + 1;
-  
-  const teamName = row['Team Name'] || 'Unspecified';
+data.forEach((row) => {
+  functionalities[row.Functionality || "Unspecified"] =
+    (functionalities[row.Functionality || "Unspecified"] || 0) + 1;
+  sprintData[row.Sprint || "Unspecified"] = (sprintData[row.Sprint || "Unspecified"] || 0) + 1;
+
+  const teamName = row["Team Name"] || "Unspecified";
   teamData[teamName] = (teamData[teamName] || 0) + 1;
-  
-  testTypes.add(row['Test Type'] || 'Unspecified');
-  scenarioTypes.add(row['Scenario Type'] || 'Unspecified');
+
+  testTypes.add(row["Test Type"] || "Unspecified");
+  scenarioTypes.add(row["Scenario Type"] || "Unspecified");
 });
+
+// Get the last 5 sprints without sorting
+const lastFiveSprints = Object.keys(sprintData).slice(-5);
+const filteredSprintData = Object.fromEntries(
+  lastFiveSprints.map((sprint) => [sprint, sprintData[sprint]]),
+);
 
 // Create HTML content
 const htmlContent = `
@@ -63,10 +70,10 @@ const htmlContent = `
             justify-content: space-around;
         }
         .chart-container {
-            width: 30%;
+            width: 45%;
             min-width: 300px;
-            height: 300px;
-            margin: 20px 0;
+            height: 400px;
+            margin: 30px 0;
             background-color: white;
             border-radius: 8px;
             padding: 15px;
@@ -101,10 +108,13 @@ const htmlContent = `
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 36px;
         }
-        @media (max-width: 1200px) {
-            .chart-container { width: 45%; }
+        #totalTests {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
             .chart-container { width: 100%; }
         }
     </style>
@@ -146,6 +156,8 @@ const htmlContent = `
             </div>
         </div>
 
+        <div id="totalTests"></div>
+
         <div class="charts-container">
             <div class="chart-container">
                 <canvas id="functionalityChart"></canvas>
@@ -162,7 +174,7 @@ const htmlContent = `
     <script>
     const data = ${JSON.stringify(data)};
     const functionalities = ${JSON.stringify(functionalities)};
-    const sprintData = ${JSON.stringify(sprintData)};
+    const sprintData = ${JSON.stringify(filteredSprintData)};
     const teamData = ${JSON.stringify(teamData)};
 
     let filteredData = [...data];
@@ -184,6 +196,8 @@ const htmlContent = `
         updateChart(functionalityChart, functionalities);
         updateChart(sprintChart, sprintData);
         updateChart(teamChart, teamData);
+
+        document.getElementById('totalTests').textContent = 'Total Tests: ' + filteredData.length;
     }
 
     function updateChart(chart, data) {
@@ -213,45 +227,39 @@ const htmlContent = `
     function initCharts() {
         Chart.register(ChartDataLabels);
 
-        // Populate filter options
         populateFilter('teamFilter', [...new Set(data.map(row => row['Team Name'] || 'Unspecified'))]);
         populateFilter('functionalityFilter', [...new Set(data.map(row => row.Functionality || 'Unspecified'))]);
         populateFilter('sprintFilter', [...new Set(data.map(row => row.Sprint || 'Unspecified'))]);
         populateFilter('testTypeFilter', [...new Set(data.map(row => row['Test Type'] || 'Unspecified'))]);
         populateFilter('scenarioTypeFilter', [...new Set(data.map(row => row['Scenario Type'] || 'Unspecified'))]);
 
-        // Initialize Select2 for all dropdowns
         $('.select2').select2({
             placeholder: "Select an option",
             allowClear: true
         });
 
-        // Create functionality pie chart
-        functionalityChart = createPieChart('functionalityChart', 'Tests by Functionality', functionalities);
-
-        // Create sprint bar chart
+        functionalityChart = createHorizontalBarChart('functionalityChart', 'Tests by Functionality', functionalities, 'rgba(54, 162, 235, 0.6)');
         sprintChart = createBarChart('sprintChart', 'Tests by Sprint', sprintData, 'rgba(255, 159, 64, 0.6)');
-
-        // Create team bar chart
         teamChart = createBarChart('teamChart', 'Tests by Team', teamData, 'rgba(75, 192, 192, 0.6)');
 
-        // Add event listeners for filters
         $('.select2').on('change', applyFilters);
+
+        document.getElementById('totalTests').textContent = 'Total Tests: ' + data.length;
     }
 
-    function createPieChart(elementId, title, data) {
+    function createHorizontalBarChart(elementId, title, data, backgroundColor) {
         return new Chart(document.getElementById(elementId), {
-            type: 'pie',
+            type: 'bar',
             data: {
                 labels: Object.keys(data),
                 datasets: [{
+                    label: title,
                     data: Object.values(data),
-                    backgroundColor: Object.keys(data).map(() => 
-                        '#' + Math.floor(Math.random()*16777215).toString(16)
-                    )
+                    backgroundColor: backgroundColor
                 }]
             },
             options: {
+                indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
@@ -264,13 +272,30 @@ const htmlContent = `
                         display: false
                     },
                     datalabels: {
-                        color: '#fff',
+                        anchor: 'end',
+                        align: 'right',
+                        offset: 4,
                         font: { weight: 'bold', size: 12 },
-                        formatter: (value, ctx) => {
-                            let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                            let percentage = (value * 100 / sum).toFixed(2) + "%";
-                            return ctx.chart.data.labels[ctx.dataIndex] + "\\n" + percentage;
+                        formatter: (value) => value,
+                        color: 'black'
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            padding: 5
                         }
+                    },
+                    y: {
+                        ticks: {
+                            padding: 5
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        right: 30
                     }
                 }
             }
@@ -296,6 +321,20 @@ const htmlContent = `
                         display: true,
                         text: title,
                         font: { size: 16 }
+                    },
+                    legend: {
+                        display: false
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        font: { weight: 'bold', size: 12 },
+                        formatter: (value) => value
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
             }
@@ -312,7 +351,6 @@ const htmlContent = `
         });
     }
 
-    // Initialize charts when the page loads
     $(document).ready(initCharts);
     </script>
 </body>
@@ -320,5 +358,5 @@ const htmlContent = `
 `;
 
 // Write HTML file
-fs.writeFileSync('test_report.html', htmlContent);
-console.log('HTML report generated: test_report.html');
+fs.writeFileSync("test_report.html", htmlContent);
+console.log("HTML report generated: test_report.html");

@@ -131,11 +131,13 @@ function getTestFiles(directory) {
 }
 
 function determineTestType(filePath) {
-  if (filePath.includes("e2e/tests/api/")) {
+  const normalizedPath = filePath.split(path.sep).join(path.posix.sep);
+
+  if (normalizedPath.includes("e2e/tests/api/")) {
     return "API";
-  } else if (filePath.includes("e2e/tests/ui/visual-tests/")) {
+  } else if (normalizedPath.includes("e2e/tests/ui/visual-tests/")) {
     return "Visual";
-  } else if (filePath.includes("e2e/tests/ui/")) {
+  } else if (normalizedPath.includes("e2e/tests/ui/")) {
     return "UI";
   }
   return "";
