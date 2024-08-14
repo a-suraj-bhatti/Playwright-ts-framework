@@ -18,7 +18,7 @@ test.describe(
     );
 
     test(
-      "test login page",
+      "login page",
       {
         annotation: {
           type: "issue",
@@ -29,22 +29,8 @@ test.describe(
       async ({ page }) => {
         // ...
         page.goto("");
+        await expect(1).toBe(1);
       },
     );
-  },
-);
-
-test(
-  "test login page22",
-  {
-    annotation: {
-      type: "issue",
-      description: "https://github.com/microsoft/playwright/issues/23180",
-    },
-    tag: ["@priority_low", "@functionality_page22", "@team_ace"],
-  },
-  async ({ page }) => {
-    // ...
-    page.goto("");
   },
 );
