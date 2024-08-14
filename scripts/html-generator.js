@@ -201,8 +201,12 @@ const htmlContent = `
     }
 
     function updateChart(chart, data) {
-        chart.data.labels = Object.keys(data);
-        chart.data.datasets[0].data = Object.values(data);
+        const sortedData = Object.entries(data)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 7);
+        
+        chart.data.labels = sortedData.map(item => item[0]);
+        chart.data.datasets[0].data = sortedData.map(item => item[1]);
         chart.update();
     }
 
@@ -266,7 +270,11 @@ const htmlContent = `
                     title: {
                         display: true,
                         text: title,
-                        font: { size: 16 }
+                        font: { size: 16 },
+                        padding: {
+                            top: 10,
+                            bottom: 30
+                        }
                     },
                     legend: {
                         display: false
@@ -320,7 +328,11 @@ const htmlContent = `
                     title: {
                         display: true,
                         text: title,
-                        font: { size: 16 }
+                        font: { size: 16 },
+                        padding: {
+                            top: 10,
+                            bottom: 30
+                        }
                     },
                     legend: {
                         display: false
