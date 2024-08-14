@@ -127,7 +127,8 @@ function extractDataFromFile(filePath, testType) {
   }
 
 function getTestFiles(directory) {
-  return glob.sync(path.join(directory, "**/*.{spec.js,spec.ts}"));
+  const normalizedDirectory = path.posix.join(...directory.split(path.sep))
+  return glob.sync(path.posix.join(normalizedDirectory, "**/*.{spec.js,spec.ts}"));
 }
 
 function determineTestType(filePath) {
