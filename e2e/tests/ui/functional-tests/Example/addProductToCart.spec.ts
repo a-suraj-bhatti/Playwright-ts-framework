@@ -3,7 +3,7 @@ import { getRandomCustomerDetails } from "@e2e/testdata/Example/testDataGenerato
 
 test(
   "User logs in to the Sauce Labs Demo page and adds an item to the cart",
-  { tag: ["@functionality_add", "@priority_medium", "@positive"] },
+  { tag: ["@functionality_add", "@priority_medium", "@positive", "@testcase_1234", "@us_SAK-123"] },
   async ({ loginPage, cartPage, checkOutPage, homePage }) => {
     await loginPage.visit();
     await loginPage.login();
