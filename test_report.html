@@ -137,43 +137,39 @@
     </div>
 
     <script>
-    const data = [{"File Name":"login.spec.ts","Test Name":"Verify that the user is able to login to the application","Functionality":"descoverride","Test Type":"UI","Priority":"high","Scenario Type":"positive","Team Name":"ovvertiode","Sprint":"2024.1.2"},{"File Name":"login.spec.ts","Test Name":"test login page","Functionality":"","Test Type":"UI","Priority":"low","Scenario Type":"","Team Name":"test","Sprint":"2024.1.2"},{"File Name":"login.spec.ts","Test Name":"test login page22","Functionality":"page22","Test Type":"UI","Priority":"low","Scenario Type":"","Team Name":"ace","Sprint":""},{"File Name":"addProductToCart.spec.ts","Test Name":"User logs in to the Sauce Labs Demo page and adds an item to the cart","Functionality":"add","Test Type":"UI","Priority":"medium","Scenario Type":"positive","Team Name":"","Sprint":""},{"File Name":"reqres.spec.ts","Test Name":"GET /api/users/2","Functionality":"","Test Type":"API","Priority":"","Scenario Type":"","Team Name":"","Sprint":""}];
-    const functionalities = {"descoverride":1,"Unspecified":2,"page22":1,"add":1};
-    const sprintData = {"2024.1.2":2,"Unspecified":3};
-    const teamData = {"ovvertiode":1,"test":1,"ace":1,"Unspecified":2};
+    const data = [{"File Name":"login.spec.ts","Test Name":"Verify that the user is able to login to the application","Functionality":"descoverride","Test Type":"UI","Priority":"high","Scenario Type":"positive","Team Name":"ovvertiode","Sprint":"2024.1.2","User Story":"https://jira.app.syfbank.com/browse/SAK-1over","Test Case ID":"666"},{"File Name":"login.spec.ts","Test Name":"login page","Functionality":"","Test Type":"UI","Priority":"low","Scenario Type":"","Team Name":"test","Sprint":"2024.1.2","User Story":"https://jira.app.syfbank.com/browse/SAK-133","Test Case ID":"777"},{"File Name":"addProductToCart.spec.ts","Test Name":"User logs in to the Sauce Labs Demo page and adds an item to the cart","Functionality":"add","Test Type":"UI","Priority":"medium","Scenario Type":"positive","Team Name":"","Sprint":"","User Story":"https://jira.app.syfbank.com/browse/SAK-123","Test Case ID":"1234"},{"File Name":"reqres.spec.ts","Test Name":"GET /api/users/2","Functionality":"","Test Type":"API","Priority":"","Scenario Type":"","Team Name":"","Sprint":"","User Story":"","Test Case ID":""}];
+    const functionalities = {"descoverride":1,"Unspecified":2,"add":1};
+    const sprintData = {"2024.1.2":2,"Unspecified":2};
+    const teamData = {"ovvertiode":1,"test":1,"Unspecified":2};
 
     let filteredData = [...data];
 
     let functionalityChart, sprintChart, teamChart;
 
-    function updateCharts() {
-        const functionalities = {};
-        const sprintData = {};
-        const teamData = {};
+ function updateCharts() {
+    const functionalities = {};
+    const sprintData = {};
+    const teamData = {};
 
-        filteredData.forEach(row => {
-            functionalities[row.Functionality || 'Unspecified'] = (functionalities[row.Functionality || 'Unspecified'] || 0) + 1;
-            sprintData[row.Sprint || 'Unspecified'] = (sprintData[row.Sprint || 'Unspecified'] || 0) + 1;
-            const teamName = row['Team Name'] || 'Unspecified';
-            teamData[teamName] = (teamData[teamName] || 0) + 1;
-        });
+    filteredData.forEach(row => {
+        functionalities[row.Functionality || 'Unspecified'] = (functionalities[row.Functionality || 'Unspecified'] || 0) + 1;
+        sprintData[row.Sprint || 'Unspecified'] = (sprintData[row.Sprint || 'Unspecified'] || 0) + 1;
+        const teamName = row['Team Name'] || 'Unspecified';
+        teamData[teamName] = (teamData[teamName] || 0) + 1;
+    });
 
-        updateChart(functionalityChart, functionalities);
-        updateChart(sprintChart, sprintData);
-        updateChart(teamChart, teamData);
+    updateChart(functionalityChart, limitDataToTop7(functionalities));
+    updateChart(sprintChart, limitDataToTop7(sprintData));
+    updateChart(teamChart, limitDataToTop7(teamData));
 
-        document.getElementById('totalTests').textContent = 'Total Tests: ' + filteredData.length;
-    }
+    document.getElementById('totalTests').textContent = 'Total Tests: ' + filteredData.length;
+}
 
-    function updateChart(chart, data) {
-        const sortedData = Object.entries(data)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 7);
-        
-        chart.data.labels = sortedData.map(item => item[0]);
-        chart.data.datasets[0].data = sortedData.map(item => item[1]);
-        chart.update();
-    }
+function updateChart(chart, data) {
+    chart.data.labels = Object.keys(data);
+    chart.data.datasets[0].data = Object.values(data);
+    chart.update();
+}
 
     function applyFilters() {
         const teamFilter = $('#teamFilter').val();
@@ -193,28 +189,40 @@
         updateCharts();
     }
 
-    function initCharts() {
-        Chart.register(ChartDataLabels);
+function initCharts() {
+    Chart.register(ChartDataLabels);
 
-        populateFilter('teamFilter', [...new Set(data.map(row => row['Team Name'] || 'Unspecified'))]);
-        populateFilter('functionalityFilter', [...new Set(data.map(row => row.Functionality || 'Unspecified'))]);
-        populateFilter('sprintFilter', [...new Set(data.map(row => row.Sprint || 'Unspecified'))]);
-        populateFilter('testTypeFilter', [...new Set(data.map(row => row['Test Type'] || 'Unspecified'))]);
-        populateFilter('scenarioTypeFilter', [...new Set(data.map(row => row['Scenario Type'] || 'Unspecified'))]);
+    populateFilter('teamFilter', [...new Set(data.map(row => row['Team Name'] || 'Unspecified'))]);
+    populateFilter('functionalityFilter', [...new Set(data.map(row => row.Functionality || 'Unspecified'))]);
+    populateFilter('sprintFilter', [...new Set(data.map(row => row.Sprint || 'Unspecified'))]);
+    populateFilter('testTypeFilter', [...new Set(data.map(row => row['Test Type'] || 'Unspecified'))]);
+    populateFilter('scenarioTypeFilter', [...new Set(data.map(row => row['Scenario Type'] || 'Unspecified'))]);
 
-        $('.select2').select2({
-            placeholder: "Select an option",
-            allowClear: true
-        });
+    $('.select2').select2({
+        placeholder: "Select an option",
+        allowClear: true
+    });
 
-        functionalityChart = createHorizontalBarChart('functionalityChart', 'Tests by Functionality', functionalities, 'rgba(54, 162, 235, 0.6)');
-        sprintChart = createBarChart('sprintChart', 'Tests by Sprint', sprintData, 'rgba(255, 159, 64, 0.6)');
-        teamChart = createBarChart('teamChart', 'Tests by Team', teamData, 'rgba(75, 192, 192, 0.6)');
+    // Apply the limit of 7 to the initial data
+    const limitedFunctionalities = limitDataToTop7(functionalities);
+    const limitedSprintData = limitDataToTop7(sprintData);
+    const limitedTeamData = limitDataToTop7(teamData);
 
-        $('.select2').on('change', applyFilters);
+    functionalityChart = createHorizontalBarChart('functionalityChart', 'Tests by Functionality', limitedFunctionalities, 'rgba(54, 162, 235, 0.6)');
+    sprintChart = createBarChart('sprintChart', 'Tests by Sprint', limitedSprintData, 'rgba(255, 159, 64, 0.6)');
+    teamChart = createBarChart('teamChart', 'Tests by Team', limitedTeamData, 'rgba(75, 192, 192, 0.6)');
 
-        document.getElementById('totalTests').textContent = 'Total Tests: ' + data.length;
-    }
+    $('.select2').on('change', applyFilters);
+
+    document.getElementById('totalTests').textContent = 'Total Tests: ' + data.length;
+}
+    function limitDataToTop7(data) {
+    return Object.fromEntries(
+        Object.entries(data)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 7)
+    );
+}
 
     function createHorizontalBarChart(elementId, title, data, backgroundColor) {
         return new Chart(document.getElementById(elementId), {

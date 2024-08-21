@@ -181,34 +181,30 @@ const htmlContent = `
 
     let functionalityChart, sprintChart, teamChart;
 
-    function updateCharts() {
-        const functionalities = {};
-        const sprintData = {};
-        const teamData = {};
+ function updateCharts() {
+    const functionalities = {};
+    const sprintData = {};
+    const teamData = {};
 
-        filteredData.forEach(row => {
-            functionalities[row.Functionality || 'Unspecified'] = (functionalities[row.Functionality || 'Unspecified'] || 0) + 1;
-            sprintData[row.Sprint || 'Unspecified'] = (sprintData[row.Sprint || 'Unspecified'] || 0) + 1;
-            const teamName = row['Team Name'] || 'Unspecified';
-            teamData[teamName] = (teamData[teamName] || 0) + 1;
-        });
+    filteredData.forEach(row => {
+        functionalities[row.Functionality || 'Unspecified'] = (functionalities[row.Functionality || 'Unspecified'] || 0) + 1;
+        sprintData[row.Sprint || 'Unspecified'] = (sprintData[row.Sprint || 'Unspecified'] || 0) + 1;
+        const teamName = row['Team Name'] || 'Unspecified';
+        teamData[teamName] = (teamData[teamName] || 0) + 1;
+    });
 
-        updateChart(functionalityChart, functionalities);
-        updateChart(sprintChart, sprintData);
-        updateChart(teamChart, teamData);
+    updateChart(functionalityChart, limitDataToTop7(functionalities));
+    updateChart(sprintChart, limitDataToTop7(sprintData));
+    updateChart(teamChart, limitDataToTop7(teamData));
 
-        document.getElementById('totalTests').textContent = 'Total Tests: ' + filteredData.length;
-    }
+    document.getElementById('totalTests').textContent = 'Total Tests: ' + filteredData.length;
+}
 
-    function updateChart(chart, data) {
-        const sortedData = Object.entries(data)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 7);
-        
-        chart.data.labels = sortedData.map(item => item[0]);
-        chart.data.datasets[0].data = sortedData.map(item => item[1]);
-        chart.update();
-    }
+function updateChart(chart, data) {
+    chart.data.labels = Object.keys(data);
+    chart.data.datasets[0].data = Object.values(data);
+    chart.update();
+}
 
     function applyFilters() {
         const teamFilter = $('#teamFilter').val();
@@ -228,28 +224,40 @@ const htmlContent = `
         updateCharts();
     }
 
-    function initCharts() {
-        Chart.register(ChartDataLabels);
+function initCharts() {
+    Chart.register(ChartDataLabels);
 
-        populateFilter('teamFilter', [...new Set(data.map(row => row['Team Name'] || 'Unspecified'))]);
-        populateFilter('functionalityFilter', [...new Set(data.map(row => row.Functionality || 'Unspecified'))]);
-        populateFilter('sprintFilter', [...new Set(data.map(row => row.Sprint || 'Unspecified'))]);
-        populateFilter('testTypeFilter', [...new Set(data.map(row => row['Test Type'] || 'Unspecified'))]);
-        populateFilter('scenarioTypeFilter', [...new Set(data.map(row => row['Scenario Type'] || 'Unspecified'))]);
+    populateFilter('teamFilter', [...new Set(data.map(row => row['Team Name'] || 'Unspecified'))]);
+    populateFilter('functionalityFilter', [...new Set(data.map(row => row.Functionality || 'Unspecified'))]);
+    populateFilter('sprintFilter', [...new Set(data.map(row => row.Sprint || 'Unspecified'))]);
+    populateFilter('testTypeFilter', [...new Set(data.map(row => row['Test Type'] || 'Unspecified'))]);
+    populateFilter('scenarioTypeFilter', [...new Set(data.map(row => row['Scenario Type'] || 'Unspecified'))]);
 
-        $('.select2').select2({
-            placeholder: "Select an option",
-            allowClear: true
-        });
+    $('.select2').select2({
+        placeholder: "Select an option",
+        allowClear: true
+    });
 
-        functionalityChart = createHorizontalBarChart('functionalityChart', 'Tests by Functionality', functionalities, 'rgba(54, 162, 235, 0.6)');
-        sprintChart = createBarChart('sprintChart', 'Tests by Sprint', sprintData, 'rgba(255, 159, 64, 0.6)');
-        teamChart = createBarChart('teamChart', 'Tests by Team', teamData, 'rgba(75, 192, 192, 0.6)');
+    // Apply the limit of 7 to the initial data
+    const limitedFunctionalities = limitDataToTop7(functionalities);
+    const limitedSprintData = limitDataToTop7(sprintData);
+    const limitedTeamData = limitDataToTop7(teamData);
 
-        $('.select2').on('change', applyFilters);
+    functionalityChart = createHorizontalBarChart('functionalityChart', 'Tests by Functionality', limitedFunctionalities, 'rgba(54, 162, 235, 0.6)');
+    sprintChart = createBarChart('sprintChart', 'Tests by Sprint', limitedSprintData, 'rgba(255, 159, 64, 0.6)');
+    teamChart = createBarChart('teamChart', 'Tests by Team', limitedTeamData, 'rgba(75, 192, 192, 0.6)');
 
-        document.getElementById('totalTests').textContent = 'Total Tests: ' + data.length;
-    }
+    $('.select2').on('change', applyFilters);
+
+    document.getElementById('totalTests').textContent = 'Total Tests: ' + data.length;
+}
+    function limitDataToTop7(data) {
+    return Object.fromEntries(
+        Object.entries(data)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 7)
+    );
+}
 
     function createHorizontalBarChart(elementId, title, data, backgroundColor) {
         return new Chart(document.getElementById(elementId), {
