@@ -1,38 +1,93 @@
-# Playwright Typescript Automation Framework
+Playwright Framework Setup Guide
 
-This is a sample automation framework using Playwright and Typescript.
-The framework is designed to run UI and API tests. It uses eslint for linting, prettier for formatting, and husky to run pre-commit checks. You can find different way how you could structure your tests without POM, with POM, with POM and custom fixtures.
+1. Installation and Setup
+1. Install Dependencies:
 
-**Installing Dependencies:**
+Ensure Node.js and npm are installed on your machine.
+Run the following command to install the necessary packages:
+Bash
 
-```bash
 npm install
-```
+2. Configuration:
 
-**Installing Playwright**
+The playwright.config.ts file handles environment-specific configurations.
+It reads from environment files (.env.qa, .env.staging) based on the ENVIRONMENT variable.
+To run tests with specific settings, set the ENVIRONMENT variable before execution:
+Bash
 
-```bash
-npx playwright install --with-deps --chromium
-npx playwright install --with-deps --webkit
-```
+ENVIRONMENT=qa npx playwright test
+3. Directory Structure:
 
-**Running the tests:**
+e2e/tests/ui: Contains UI tests.
+e2e/tests/api: Contains API tests.
+e2e/libs/custom-decorators: Contains custom decorators.
+scripts: Contains scripts for generating HTML reports.
+2. Custom Decorators
+The custom @step decorator is designed to log test steps in a readable format within your Playwright tests. It wraps test methods to provide detailed step-level logging using Playwright's built-in test.step functionality.
 
-```bash
-npm run test - Run all tests
-npm run test:chrome - Run UI tests in Chromium
-npm run test:webkit - Run UI tests in Webkit
-npm run test:api - Run API tests
-```
+Usage:
 
-**Formatting:**
+To use the custom @step decorator, simply import it and apply it to any method within your test:
 
-```bash
-npm run format:fix
-```
+TypeScript
 
-**Linting:**
+import step from '../libs/custom-decorators/step.decorator';
 
-```bash
-npm run lint:fix
-```
+class ExamplePage {
+  @step('Log in to the application')
+  async login(username: string, password: string) {
+    await this.page.fill('#username', username);
+    await this.page.fill('#password', password);
+    await this.page.click('#login');
+  }
+}
+This will output the step in the test report, making it easier to trace actions within your tests.
+
+3. HTML Reporting
+The framework includes scripts to generate HTML reports that visualize test data. The html-generator.js script processes data from an Excel file (Test_Data.xlsx) and generates an HTML report.
+
+Chart.js Integration: The report uses Chart.js to visualize data, including test functionality distribution, sprint data, and more.
+Customization: You can customize the charts and data processing within html-generator.js to suit your reporting needs.
+Generating the Report:
+
+To generate the HTML report, simply run the script:
+
+Bash
+
+node scripts/html-generator.js
+This will create an HTML file (test_report.html) in your project directory, which you can open in a browser to view the results.
+
+4. Running Tests
+Command-Line Options:
+
+Running All Tests:
+Bash
+
+npx playwright test
+Running Specific Tests:
+Use --grep or --grep-invert to run specific tests or exclude tests based on titles:
+
+Bash
+
+npx playwright test --grep @smoke
+Headless Mode:
+Although the config specifies headless: false for Chromium, you can override this in the command line:
+
+Bash
+
+npx playwright test --headed
+Parallel Execution:
+
+The framework is configured for parallel execution (fullyParallel: true), which speeds up test runs. You can control the number of workers with the --workers option:
+Bash
+
+npx playwright test --workers=4
+5. CI/CD Integration
+GitHub Actions: A GitHub Actions workflow file (.github/workflows/playwright.yml) is included to integrate your tests into a CI/CD pipeline.
+This workflow will trigger on pushes to the main branch, running your Playwright tests automatically.
+6. Extending the Framework
+Custom Fixtures: The framework includes a customFixtures.ts file, allowing you to define and register custom fixtures for your tests. This is useful for setting up shared state or resources.
+Page Object Model (POM): The e2e/pages directory contains Page Object classes (e.g., loginPage.ts, cartPage.ts), promoting the reuse of code and better test maintenance.
+7. Best Practices
+Test Data Management: Store test data separately in e2e/testdata, and utilize data-driven testing by loading data from files or external sources.
+Error Handling and Debugging: Utilize Playwright’s trace feature (enabled in your config) for debugging. It provides detailed information on failed tests, including screenshots, logs, and network requests
