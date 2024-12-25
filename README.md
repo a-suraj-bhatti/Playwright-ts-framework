@@ -53,7 +53,7 @@ This will output the step in the test report, making it easier to trace actions 
 
 ## 3. HTML Reporting
 
-The framework includes scripts to generate HTML reports that visualize test data. The `html-generator.js` script processes data from an Excel file (`Test_Data.xlsx`) and generates an HTML report.
+The framework includes scripts to generate HTML reports that visualize thelp visualize the tests that have been developed till date. The report helps in filtering the tests by functionality,team etc by utilizing by reading the tags within the tests and generating a detailed HTML report.
 
 ### Features
 - **Chart.js Integration**: The report uses Chart.js to visualize data, including test functionality distribution, sprint data, and more.
@@ -63,7 +63,7 @@ The framework includes scripts to generate HTML reports that visualize test data
 To generate the HTML report, simply run the script:
 
 ```bash
-node scripts/html-generator.js
+npm run report
 ```
 
 This will create an HTML file (`test_report.html`) in your project directory, which you can open in a browser to view the results.
@@ -136,17 +136,7 @@ While the framework uses an HTML reporter, you can integrate with other reporter
 
 ---
 
-## 8. Future Enhancements
-
-### Visual Testing
-Implement visual regression tests in the `visual-tests` directory for UI consistency across versions.
-
-### API Testing
-Expand the `api` tests to cover more extensive scenarios, leveraging Playwright’s robust API testing capabilities.
-
----
-
-## 9. Linting and Code Quality
+## 8. Linting and Code Quality
 
 ### ESLint
 
