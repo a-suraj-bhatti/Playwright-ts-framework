@@ -14,14 +14,21 @@
     "format": "npx prettier . --check",
     "format:fix": "npx prettier . --write",
     "report": "node scripts/report-generator.js && node scripts/html-generator.js",
+    "lint-staged": "lint-staged",
     "prepare": "husky"
   },
+  "lint-staged": {
+  "*.{js,ts}": [
+    "eslint --fix",
+    "prettier --write"
+  ]
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
-    "@playwright/test": "^1.45.2",
+    "@playwright/test": "^1.49.0",
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.21.0",
@@ -34,6 +41,7 @@
     "exceljs": "^4.4.0",
     "glob": "^11.0.0",
     "husky": "^9.0.11",
+    "lint-staged": "^15.2.11",
     "prettier": "3.2.5",
     "typescript": "^5.3.3",
     "xlsx": "^0.18.5"
